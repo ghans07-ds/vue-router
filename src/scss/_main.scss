@@ -1,0 +1,50 @@
+$primary-color: #db0000;
+$secondary-color: #000000;
+$tertiory-color: #212121;
+$secondary-font-size: 2em;
+
+@mixin placeholder-style {
+  color: rgba(29, 6, 6, 0.76);
+}
+
+@mixin btn-style {
+  font-size: 2.5em;
+  font-weight: bolder;
+  color: white;
+  background-color: $primary-color;
+  border: none;
+}
+@mixin input-style {
+  box-sizing: border-box;
+  width: 100%;
+  font-size: $secondary-font-size;
+  padding: 13px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+
+  background-color: rgb(170, 144, 146);
+  //   background-color: #fff;
+}
+@mixin form-title {
+  color: white;
+  height: 15vh;
+  text-align: center;
+  font-size: 4em;
+  line-height: 15vh;
+}
+@mixin form-container {
+  background-color: $tertiory-color;
+  height: 80vh;
+  width: 40%;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+@mixin font-awesome {
+  position: absolute;
+  font-size: 3.5em;
+  color: $primary-color;
+  top: 2.5%;
+  left: 2%;
+}
