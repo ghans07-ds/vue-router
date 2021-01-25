@@ -130,7 +130,7 @@ export default {
     .website-option {
       position: absolute;
       top: 10vh;
-      border: 1px solid white;
+      // border: 1px solid white;
       height: 100vh;
       width: 100vw;
       background-color: black;

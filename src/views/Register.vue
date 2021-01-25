@@ -4,56 +4,93 @@
       <div class="signup-title"></div>
       <div class="signup-field">
         <form action="" @submit.prevent="checkform">
-          <div class="username-field">
+          <!-- username field -->
+          <div class="username-field input-field">
             <input
               :class="{
-                sucess: UserSucessMsg,
-                error: UserSucessMsg === null ? null : !UserSucessMsg,
+                error: userSucessMsg === null ? null : !userSucessMsg,
               }"
               type="text"
               placeholder="Username"
               v-model="username"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'username-error-msg':
+                  userSucessMsg === null ? null : !userSucessMsg,
+              }"
+            >
+              4 to 10 alphnumeric character only
+            </div>
           </div>
-          <div class="mail-field">
+          <!-- mail filed -->
+          <div class="mail-field input-field">
             <input
               :class="{
-                sucess: mailSucessMsg,
                 error: mailSucessMsg === null ? null : !mailSucessMsg,
               }"
               type="mail"
               placeholder="E-mail"
               v-model="mail"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'mail-error-msg':
+                  mailSucessMsg === null ? null : !mailSucessMsg,
+              }"
+            >
+              invalid email
+            </div>
           </div>
-          <div class="password-field">
+          <!-- password field -->
+          <div class="password-field input-field">
             <input
               :class="{
-                sucess: pwdSucessMsg,
                 error: pwdSucessMsg === null ? null : !pwdSucessMsg,
               }"
               type="password"
               placeholder="Password"
               v-model="pwd"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'pwd-error-msg': pwdSucessMsg === null ? null : !pwdSucessMsg,
+              }"
+            >
+              Password must be of 6 to 20 character
+            </div>
           </div>
-          <div class="password-verify-field">
+          <!-- verify password field -->
+          <div class="password-verify-field input-field">
             <input
               :class="{
-                sucess: VpwdSucessMsg,
                 error: VpwdSucessMsg === null ? null : !VpwdSucessMsg,
               }"
               type="password"
               placeholder="Verify Password"
               v-model="Vpwd"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'vPwd-error-msg':
+                  VpwdSucessMsg === null ? null : !VpwdSucessMsg,
+              }"
+            >
+              Password must be of 6 to 12 character
+            </div>
           </div>
-          <div class="btn-field">
-            <input type="submit" value="SignUp" />
+          <!-- button field -->
+          <div class="btn-field input-field">
+            <input type="submit" value="Sign Up" />
           </div>
-          <div class="other-option">
+          <div class="other-option input-field">
             <div class="register-link">
-              <span>already account?&nbsp;</span><a href="">join</a>
+              <span>already account?&nbsp;</span
+              ><router-link to="/login">login</router-link>
             </div>
           </div>
         </form>
@@ -71,20 +108,19 @@ export default {
       mail: null,
       pwd: null,
       Vpwd: null,
-      username: null,
+      username: "",
       mailSucessMsg: null,
       pwdSucessMsg: null,
       VpwdSucessMsg: null,
-      UserSucessMsg: null,
+      userSucessMsg: null,
     };
   },
   methods: {
     checkform() {
-      this.UserSucessMsg = ac.inputStatus(this.username, ac.regexUser);
+      this.userSucessMsg = ac.inputStatus(this.username, ac.regexUser);
       this.mailSucessMsg = ac.inputStatus(this.mail, ac.regexMail);
       this.pwdSucessMsg = ac.inputStatus(this.pwd, ac.regexPwd);
       this.VpwdSucessMsg = ac.inputStatus(this.Vpwd, ac.regexPwd);
-      console.log(localStorage.getItem("ghans07"));
       if (
         ac.isValid(this.username, ac.regexUser) &&
         ac.isValid(this.pwd, ac.regexPwd) &&
@@ -92,14 +128,11 @@ export default {
         ac.isValid(this.Vpwd, ac.regexPwd)
       ) {
         if (localStorage.getItem(this.mail) === null) {
-          if (
-            ac.isValid(this.pwd, ac.regexPwd) ===
-            ac.isValid(this.Vpwd, ac.regexPwd)
-          ) {
+          if (this.pwd === this.Vpwd) {
             this.signupStorage();
-            alert("sucessfully registered");
+            this.$router.push("/login");
           } else {
-            alert("password is incorrect");
+            alert("verify password ");
           }
         } else {
           alert("already registered");
@@ -117,6 +150,11 @@ export default {
       localStorage.setItem(this.mail, userData);
     },
   },
+  beforeRouteLeave(to, from, next) {
+    if (from.fullPath === "/login") {
+      next();
+    }
+  },
 };
 </script>
 <style lang="scss">
@@ -125,51 +163,72 @@ export default {
 .signup {
   width: 100vw;
   height: 90vh;
-  padding: 5vh 0;
+  padding-top: 7vh;
   background-color: $secondary-color;
 
   .signup-container {
     @include form-container;
+    padding-bottom: 5vh;
+    height: auto;
     .signup-title {
       @include form-title;
       height: 5vh;
       line-height: 5vh;
     }
     .signup-field {
+      // height: 80vh;
       width: 70%;
       margin: 0 auto;
-      form div {
-        width: 100%;
-        margin-top: 4vh;
-        input {
-          @include input-style;
+      form {
+        .input-field {
+          width: 100%;
+          margin-top: 4vh;
+
+          .error-msg {
+            font-size: 1.8em;
+            color: orange;
+            display: none;
+          }
+          input {
+            @include input-style;
+          }
+          input::placeholder {
+            @include placeholder-style;
+          }
+          .error {
+            border-bottom: 3px solid orange;
+          }
+
+          .mail-error-msg {
+            display: block;
+          }
+          .pwd-error-msg {
+            display: block;
+          }
+          .username-error-msg {
+            display: block;
+          }
+          .vPwd-error-msg {
+            display: block;
+          }
         }
-        input::placeholder {
-          @include placeholder-style;
+        .btn-field {
+          margin-top: 5vh;
+          input {
+            @include btn-style;
+          }
         }
-        .error {
-          border: 2px solid red;
-        }
-        .sucess {
-          border: 2px solid green;
-        }
-      }
-      .btn-field {
-        margin-top: 10vh;
-        input {
-          @include btn-style;
-        }
-      }
-      .other-option .register-link {
-        color: white;
-        text-align: center;
-        font-size: $secondary-font-size;
-        a {
-          text-decoration: none;
-          color: $primary-color;
-        }
-        a:hover {
-          border-bottom: 1px solid white;
+        .other-option .register-link {
+          color: white;
+          text-align: center;
+          font-size: $secondary-font-size;
+          a {
+            text-decoration: none;
+            color: $primary-color;
+          }
+          a:hover {
+            border-bottom: 1px solid white;
+          }
         }
       }
     }
@@ -177,10 +236,35 @@ export default {
 }
 @media (max-width: 600px) {
   .signup {
+    // height: 90vh;
+    padding-top: 5vh;
     .signup-container {
       width: 90%;
+      height: auto;
+      padding-bottom: 5vh;
+
+      .signup-title {
+        height: 1vh;
+        line-height: 1vh;
+      }
       .signup-field {
         width: 90%;
+        form {
+          height: auto;
+          .input-field {
+            .error-msg {
+              font-size: 1.5em;
+              color: orange;
+              // display: none;
+            }
+          }
+          .btn-field {
+            margin-top: 6vh;
+            input {
+              font-size: 2em;
+            }
+          }
+        }
       }
     }
   }

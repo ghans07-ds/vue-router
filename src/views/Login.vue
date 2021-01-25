@@ -4,27 +4,44 @@
       <div class="login-title"></div>
       <div class="login-field">
         <form action="" @submit.prevent="checkForm">
-          <div class="mail-field">
+          <div class="mail-field input-field">
+            <!-- mail-field -->
             <input
               :class="{
-                sucess: mailSucessMsg,
                 error: mailSucessMsg === null ? null : !mailSucessMsg,
               }"
               type="mail"
               placeholder="E-mail"
               v-model="mail"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'mail-error-msg':
+                  mailSucessMsg === null ? null : !mailSucessMsg,
+              }"
+            >
+              Please enter valid mail
+            </div>
           </div>
-          <div class="password-field">
+          <!-- password field -->
+          <div class="input-field password-field">
             <input
               :class="{
-                sucess: pwdSucessMsg,
                 error: pwdSucessMsg === null ? null : !pwdSucessMsg,
               }"
               :type="passwordStatus"
               placeholder="Password"
               v-model="pwd"
             />
+            <div
+              class="error-msg"
+              :class="{
+                'pwd-error-msg': pwdSucessMsg === null ? null : !pwdSucessMsg,
+              }"
+            >
+              Password must be of 6 to 20 character
+            </div>
             <div class="show-password">
               <input
                 @click="showPassword"
@@ -35,13 +52,16 @@
               <label for="show-pwd">Show Password</label>
             </div>
           </div>
-          <div class="btn-field">
-            <input type="submit" value="Login" />
+          s
+          <!-- button field -->
+          <div class="input-field btn-field">
+            <input type="submit" value="Sign In" />
             <div class="forgot-pwd"><a href="">forgot password?</a></div>
           </div>
-          <div class="other-option">
+          <div class="input-field other-option">
             <div class="register-link">
-              <span>new?&nbsp;</span><a href="">create Account</a>
+              <span>new?&nbsp;</span>
+              <router-link to="/register">register</router-link>
             </div>
           </div>
         </form>
@@ -73,14 +93,13 @@ export default {
     checkForm() {
       this.mailSucessMsg = ac.inputStatus(this.mail, ac.regexMail);
       this.pwdSucessMsg = ac.inputStatus(this.pwd, ac.regexPwd);
-      console.log("hey", ac.regexMail, this.mail);
 
       if (
         ac.isValid(this.mail, ac.regexMail) &&
         ac.isValid(this.pwd, ac.regexPwd)
       ) {
         if (this.isCheckUser(this.mail, this.pwd)) {
-          alert("sucessfully logined");
+          this.$router.push("/welcome");
         } else {
           alert("please create account");
         }
@@ -95,6 +114,14 @@ export default {
       }
     },
   },
+  beforeRouteLeave(to, from, next) {
+    if (from.fullPath === "/login") {
+      next();
+    }
+    if (from.fullPath === "/welcome") {
+      next();
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -103,7 +130,7 @@ export default {
 .login {
   width: 100vw;
   height: 90vh;
-  padding: 5vh 0;
+  padding-top: 5vh;
   background-color: $secondary-color;
 
   .login-container {
@@ -116,62 +143,73 @@ export default {
     .login-field {
       width: 70%;
       margin: 0 auto;
-      form div {
-        width: 100%;
-        margin-top: 4vh;
-        input {
-          @include input-style;
-        }
-        input::placeholder {
-          @include placeholder-style;
-        }
-        .error {
-          border: 2px solid red;
-        }
-        .sucess {
-          border: 2px solid green;
-        }
-      }
-      .password-field {
-        .show-password {
-          margin-top: 0;
-          color: white;
-          font-size: $secondary-font-size;
+      form {
+        .input-field {
+          width: 100%;
+          margin-top: 4vh;
 
+          .error-msg {
+            font-size: 1.7em;
+            color: orange;
+            display: none;
+          }
           input {
-            width: 5%;
+            @include input-style;
+          }
+          input::placeholder {
+            @include placeholder-style;
+          }
+          .error {
+            border-bottom: 3px solid orange;
+          }
+          .mail-error-msg {
+            display: block;
+          }
+          .pwd-error-msg {
+            display: block;
           }
         }
-      }
-      .btn-field {
-        margin-top: 10vh;
-        input {
-          @include btn-style;
+        .password-field {
+          .show-password {
+            margin-top: 1vh;
+            color: white;
+            font-size: $secondary-font-size;
+
+            input {
+              width: 5%;
+            }
+          }
         }
-        .forgot-pwd {
-          margin-top: 0;
+        .btn-field {
+          margin-top: 10vh;
+          input {
+            @include btn-style;
+          }
+          .forgot-pwd {
+            margin-top: 0;
+            font-size: $secondary-font-size;
+
+            a {
+              text-decoration: none;
+              color: white;
+            }
+            a:hover {
+              border-bottom: 1px solid white;
+            }
+          }
+        }
+        .other-option .register-link {
+          color: white;
+          text-align: center;
           font-size: $secondary-font-size;
 
           a {
             text-decoration: none;
-            color: white;
+            color: $primary-color;
           }
           a:hover {
             border-bottom: 1px solid white;
           }
-        }
-      }
-      .other-option .register-link {
-        color: white;
-        text-align: center;
-        font-size: $secondary-font-size;
-
-        a {
-          text-decoration: none;
-          color: $primary-color;
-        }
-        a:hover {
-          border-bottom: 1px solid white;
         }
       }
     }
@@ -179,10 +217,30 @@ export default {
 }
 @media (max-width: 600px) {
   .login {
+    padding-top: 2vh;
     .login-container {
       width: 90%;
+      .login-title {
+        line-height: 5vh;
+        height: 5vh;
+      }
       .login-field {
         width: 90%;
+        form {
+          .password-field {
+            .show-password {
+              font-size: 1.7em;
+            }
+          }
+          .btn-field {
+            input {
+              font-size: 2em;
+            }
+            .forgot-pwd {
+              font-size: 1.7em;
+            }
+          }
+        }
       }
     }
   }

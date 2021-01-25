@@ -9,7 +9,7 @@ $secondary-font-size: 2em;
 
 @mixin btn-style {
   font-size: 2.5em;
-  font-weight: bolder;
+  // font-weight: bolder;
   color: white;
   background-color: $primary-color;
   border: none;
@@ -17,12 +17,11 @@ $secondary-font-size: 2em;
 @mixin input-style {
   box-sizing: border-box;
   width: 100%;
-  font-size: $secondary-font-size;
+  font-size: 2em;
   padding: 13px;
   border-radius: 5px;
   outline: none;
   border: none;
-
   background-color: rgb(170, 144, 146);
   //   background-color: #fff;
 }
@@ -39,6 +38,7 @@ $secondary-font-size: 2em;
   width: 40%;
   margin: 0 auto;
   border-radius: 10px;
+  padding-bottom: 2vh;
 }
 
 @mixin font-awesome {

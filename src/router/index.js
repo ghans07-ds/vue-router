@@ -22,6 +22,11 @@ const routes = [
     component: () => import("../views/Register.vue"),
   },
   {
+    path: "/welcome",
+    name: "Welcome",
+    component: () => import("../views/Welcome.vue"),
+  },
+  {
     path: "/:pathMatch(.*)",
     component: () => import("../views/ErrorPage.vue"),
   },
@@ -35,6 +40,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  // mode: "history",
   routes,
 });
 
