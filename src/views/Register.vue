@@ -151,9 +151,9 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    if (from.fullPath === "/login") {
-      next();
-    }
+    // if (from.fullPath === "/login") {
+    next();
+    // }
   },
 };
 </script>
