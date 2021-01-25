@@ -1,6 +1,7 @@
 export let regexMail = /^([a-z\d]{1})([a-z\d.]{3,30})@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
 export let regexPwd = /^[\w@-]{6,20}$/;
 export let regexUser = /^[a-zA-Z\d]{4,10}$/;
+export let regexUser1 = /^[a-zA-Z\d]{4,10}$/;
 
 export function isValid(value, regex) {
   if (regex.test(value)) {
